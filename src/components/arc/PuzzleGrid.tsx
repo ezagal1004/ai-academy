@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
+import { motion, Variants } from 'framer-motion';
 import { Eraser } from 'lucide-react';
 
 // Color palette
@@ -103,7 +103,7 @@ export default function PuzzleGrid({ level, onSuccess, onFailure }: PuzzleGridPr
     };
 
     // Stagger animation for grid cells
-    const containerVariants = {
+    const containerVariants: Variants = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
@@ -113,13 +113,13 @@ export default function PuzzleGrid({ level, onSuccess, onFailure }: PuzzleGridPr
         },
     };
 
-    const cellVariants = {
+    const cellVariants: Variants = {
         hidden: { scale: 0, opacity: 0 },
         visible: {
             scale: 1,
             opacity: 1,
             transition: {
-                type: 'spring',
+                type: 'spring' as const,
                 stiffness: 260,
                 damping: 20,
             },
