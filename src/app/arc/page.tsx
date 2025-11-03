@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import PuzzleGrid from '@/components/arc/PuzzleGrid';
 import DialogScreen from '@/components/arc/DialogScreen';
 import { LEVELS } from '@/components/arc/LevelData';
