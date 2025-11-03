@@ -56,6 +56,9 @@ export default function PuzzleGrid({ level, onSuccess, onFailure }: PuzzleGridPr
         setSelectedColor(1);
         setIsShaking(false);
         setIsPulsing(false);
+        
+        // Scroll to top when level changes
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [level.id, level.gridSize]);
 
     // Handle cell click - paint with selected color or erase if clicking same color
@@ -123,17 +126,30 @@ export default function PuzzleGrid({ level, onSuccess, onFailure }: PuzzleGridPr
         },
     };
 
+    // Calculate responsive cell size based on grid size
+    // For 3x3: larger cells, for 4x4: smaller cells
+    const getCellSizeClasses = () => {
+        if (level.gridSize === 3) {
+            return 'w-[min(12vw,60px)] h-[min(12vw,60px)] sm:w-[min(10vw,70px)] sm:h-[min(10vw,70px)] md:w-[min(8vw,80px)] md:h-[min(8vw,80px)]';
+        } else {
+            // 4x4 grid - smaller cells
+            return 'w-[min(10vw,50px)] h-[min(10vw,50px)] sm:w-[min(8vw,60px)] sm:h-[min(8vw,60px)] md:w-[min(7vw,70px)] md:h-[min(7vw,70px)]';
+        }
+    };
+
+    const cellSizeClasses = getCellSizeClasses();
+
     return (
-        <div className="flex flex-col items-center gap-3 sm:gap-4 md:gap-5 w-full max-w-6xl">
-            {/* Grids Container */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-5 lg:gap-6">
+        <div className="flex flex-col items-center gap-3 sm:gap-4 md:gap-5 lg:gap-6 w-full max-w-6xl mx-auto">
+            {/* Grids Container - Always Side by Side with proper constraints */}
+            <div className="flex flex-row items-center justify-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 w-full max-w-full overflow-visible">
                 {/* Input Grid (Display Only) */}
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center flex-shrink min-w-0">
                     <motion.h3
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.2 }}
-                        className="azosans-bold text-xl sm:text-2xl lg:text-3xl text-white mb-2 sm:mb-3 drop-shadow-lg"
+                        className="azosans-bold text-xs xs:text-sm sm:text-base md:text-xl lg:text-2xl text-white mb-1 xs:mb-1.5 sm:mb-2 drop-shadow-lg"
                     >
                         INPUT
                     </motion.h3>
@@ -146,10 +162,10 @@ export default function PuzzleGrid({ level, onSuccess, onFailure }: PuzzleGridPr
                                 ? { scale: [1, 1.1, 0], opacity: [1, 1, 0], transition: { duration: 0.4 } }
                                 : "visible"
                         }
-                        className="bg-slate-800 p-2.5 sm:p-3 lg:p-4 rounded-xl sm:rounded-2xl shadow-2xl border-2 sm:border-3 border-slate-700"
+                        className="bg-slate-800 p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl md:rounded-2xl shadow-xl border-2 border-slate-700"
                     >
                         <div
-                            className="grid gap-1.5 sm:gap-2 lg:gap-2.5"
+                            className="grid gap-1 sm:gap-1.5 md:gap-2"
                             style={{
                                 gridTemplateColumns: `repeat(${level.gridSize}, 1fr)`,
                             }}
@@ -159,7 +175,7 @@ export default function PuzzleGrid({ level, onSuccess, onFailure }: PuzzleGridPr
                                     <motion.div
                                         key={`input-${rowIndex}-${colIndex}`}
                                         variants={cellVariants}
-                                        className="w-9 h-9 sm:w-11 sm:h-11 md:w-13 md:h-13 lg:w-16 lg:h-16 rounded-lg sm:rounded-xl shadow-lg border-2 sm:border-3 border-white/60"
+                                        className={`${cellSizeClasses} rounded-sm sm:rounded-md md:rounded-lg shadow-md border-2 border-white/60`}
                                         style={{ backgroundColor: COLORS[color as keyof typeof COLORS] }}
                                     />
                                 ))
@@ -173,18 +189,18 @@ export default function PuzzleGrid({ level, onSuccess, onFailure }: PuzzleGridPr
                     initial={{ opacity: 0, scale: 0 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.4, type: 'spring' }}
-                    className="azosans-black text-4xl sm:text-5xl lg:text-6xl text-white drop-shadow-2xl rotate-90 sm:rotate-0"
+                    className="azosans-black text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white drop-shadow-2xl flex-shrink-0"
                 >
                     ⇒
                 </motion.div>
 
                 {/* Output Grid (Interactive) */}
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center flex-shrink min-w-0">
                     <motion.h3
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.2 }}
-                        className="azosans-bold text-xl sm:text-2xl lg:text-3xl text-white mb-2 sm:mb-3 drop-shadow-lg"
+                        className="azosans-bold text-xs xs:text-sm sm:text-base md:text-xl lg:text-2xl text-white mb-1 xs:mb-1.5 sm:mb-2 drop-shadow-lg"
                     >
                         SOLUTION
                     </motion.h3>
@@ -199,11 +215,11 @@ export default function PuzzleGrid({ level, onSuccess, onFailure }: PuzzleGridPr
                                     ? { scale: [1, 1.1, 0], opacity: [1, 1, 0], transition: { duration: 0.4 } }
                                     : "visible"
                         }
-                        className="bg-slate-800 p-2.5 sm:p-3 lg:p-4 rounded-xl sm:rounded-2xl shadow-2xl border-2 sm:border-3 border-slate-700"
+                        className="bg-slate-800 p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl md:rounded-2xl shadow-xl border-2 border-slate-700"
                     >
                         <motion.div
                             variants={containerVariants}
-                            className="grid gap-1.5 sm:gap-2 lg:gap-2.5"
+                            className="grid gap-1 sm:gap-1.5 md:gap-2"
                             style={{
                                 gridTemplateColumns: `repeat(${level.gridSize}, 1fr)`,
                             }}
@@ -213,7 +229,7 @@ export default function PuzzleGrid({ level, onSuccess, onFailure }: PuzzleGridPr
                                     <button
                                         key={`output-${rowIndex}-${colIndex}`}
                                         onClick={() => handleCellClick(rowIndex, colIndex)}
-                                        className="w-9 h-9 sm:w-11 sm:h-11 md:w-13 md:h-13 lg:w-16 lg:h-16 rounded-lg sm:rounded-xl shadow-lg border-2 sm:border-3 border-white/60 cursor-pointer transition-all hover:opacity-80 hover:border-white hover:shadow-2xl active:opacity-60 active:scale-95"
+                                        className={`${cellSizeClasses} rounded-sm sm:rounded-md md:rounded-lg shadow-md border-2 border-white/60 cursor-pointer transition-all hover:opacity-80 hover:border-white hover:shadow-2xl active:opacity-60 active:scale-95 touch-manipulation`}
                                         style={{ backgroundColor: COLORS[color as keyof typeof COLORS] }}
                                     />
                                 ))
@@ -228,38 +244,38 @@ export default function PuzzleGrid({ level, onSuccess, onFailure }: PuzzleGridPr
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 }}
-                className="flex flex-col items-center gap-2 sm:gap-2.5"
+                className="flex flex-col items-center gap-2 w-full max-w-2xl"
             >
-                <h4 className="azosans-bold text-lg sm:text-xl lg:text-2xl text-white drop-shadow-lg">
+                <h4 className="azosans-bold text-xs sm:text-sm md:text-base lg:text-xl text-white drop-shadow-lg">
                     SELECT COLOR
                 </h4>
-                <div className="flex gap-1.5 sm:gap-2">
+                <div className="flex gap-2 sm:gap-3 flex-wrap justify-center items-center">
                     {/* Eraser (White) - Separated */}
-                    <div className="bg-slate-800 p-2.5 sm:p-3 rounded-xl sm:rounded-xl border-2 sm:border-3 border-slate-700 shadow-2xl">
+                    <div className="bg-slate-800 p-2 rounded-lg border-2 border-slate-700 shadow-xl">
                         <button
                             onClick={() => setSelectedColor(0)}
-                            className={`w-9 h-9 sm:w-11 sm:h-11 lg:w-13 lg:h-13 rounded-lg sm:rounded-xl shadow-lg transition-all hover:opacity-80 active:opacity-60 flex items-center justify-center ${selectedColor === 0
-                                ? 'border-2 sm:border-3 border-white scale-110 shadow-2xl'
-                                : 'border-2 sm:border-3 border-white/60'
+                            className={`w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-md shadow-md transition-all hover:opacity-80 active:opacity-60 active:scale-95 flex items-center justify-center touch-manipulation ${selectedColor === 0
+                                ? 'border-3 border-white scale-110 shadow-2xl'
+                                : 'border-2 border-white/60'
                                 }`}
                             style={{ backgroundColor: COLORS[0] }}
                             title="Eraser"
                         >
-                            <Eraser className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-slate-700" />
+                            <Eraser className="w-5 h-5 sm:w-6 sm:h-6 text-slate-700" />
                         </button>
                     </div>
 
                     {/* Color Palette */}
-                    <div className="flex gap-2 sm:gap-2.5 bg-slate-800 p-2.5 sm:p-3 rounded-xl sm:rounded-xl border-2 sm:border-3 border-slate-700 shadow-2xl">
+                    <div className="flex gap-2 sm:gap-3 bg-slate-800 p-2 rounded-lg border-2 border-slate-700 shadow-xl flex-wrap justify-center">
                         {Object.entries(COLORS)
                             .filter(([index]) => index !== '0') // Exclude white/eraser
                             .map(([index, color]) => (
                                 <button
                                     key={index}
                                     onClick={() => setSelectedColor(Number(index))}
-                                    className={`w-9 h-9 sm:w-11 sm:h-11 lg:w-13 lg:h-13 rounded-lg sm:rounded-xl shadow-lg transition-all hover:opacity-80 active:opacity-60 ${selectedColor === Number(index)
-                                        ? 'border-2 sm:border-3 border-white scale-110 shadow-2xl'
-                                        : 'border-2 sm:border-3 border-white/60'
+                                    className={`w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-md shadow-md transition-all hover:opacity-80 active:opacity-60 active:scale-95 touch-manipulation ${selectedColor === Number(index)
+                                        ? 'border-3 border-white scale-110 shadow-2xl'
+                                        : 'border-2 border-white/60'
                                         }`}
                                     style={{ backgroundColor: color }}
                                     title={COLOR_NAMES[index as unknown as keyof typeof COLOR_NAMES]}
@@ -274,13 +290,13 @@ export default function PuzzleGrid({ level, onSuccess, onFailure }: PuzzleGridPr
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8 }}
-                className="flex flex-wrap justify-center gap-2.5 sm:gap-3"
+                className="flex flex-row flex-wrap justify-center gap-3 w-full max-w-xl"
             >
                 <motion.button
                     whileHover={{ scale: 1.05, y: -3 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={handleReset}
-                    className="azosans-black text-xl sm:text-2xl md:text-2xl px-8 sm:px-12 md:px-14 py-3 sm:py-3.5 md:py-4 bg-[#187abf] text-white shadow-2xl transition-all hover:bg-[#0067be]"
+                    className="azosans-black text-base sm:text-lg md:text-xl lg:text-2xl px-8 sm:px-10 md:px-12 py-3 sm:py-3.5 md:py-4 bg-[#187abf] text-white shadow-xl transition-all hover:bg-[#0067be] hover:scale-105 active:scale-95 touch-manipulation flex-1 min-w-[120px]"
                     style={{ borderRadius: '6px' }}
                 >
                     RESET
@@ -289,7 +305,7 @@ export default function PuzzleGrid({ level, onSuccess, onFailure }: PuzzleGridPr
                     whileHover={{ scale: 1.05, y: -3 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={handleSubmit}
-                    className="azosans-black text-xl sm:text-2xl md:text-2xl px-8 sm:px-12 md:px-14 py-3 sm:py-3.5 md:py-4 bg-[#0db88f] text-white shadow-2xl transition-all hover:bg-[#07a881]"
+                    className="azosans-black text-base sm:text-lg md:text-xl lg:text-2xl px-8 sm:px-10 md:px-12 py-3 sm:py-3.5 md:py-4 bg-[#0db88f] text-white shadow-xl transition-all hover:bg-[#07a881] hover:scale-105 active:scale-95 touch-manipulation flex-1 min-w-[120px]"
                     style={{ borderRadius: '6px' }}
                 >
                     SUBMIT

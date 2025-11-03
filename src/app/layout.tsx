@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Image from "next/image";
-import Link from "next/link";
-import { Home } from "lucide-react";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -27,6 +25,31 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            /* Allow scrolling but prevent bounce on mobile */
+            html, body {
+              overscroll-behavior: none;
+              overscroll-behavior-y: none;
+              overscroll-behavior-x: none;
+              -webkit-overflow-scrolling: touch;
+            }
+            
+            /* Hide scrollbars but allow scrolling */
+            * {
+              scrollbar-width: none; /* Firefox */
+              -ms-overflow-style: none; /* IE and Edge */
+            }
+            
+            *::-webkit-scrollbar {
+              display: none; /* Chrome, Safari, Opera */
+              width: 0;
+              height: 0;
+            }
+          `
+        }} />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -42,8 +65,6 @@ export default function RootLayout({
           {/* Light overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-blue-900/10 via-transparent to-blue-900/20" />
         </div>
-
-        
 
         {/* Game Content */}
         {children}
