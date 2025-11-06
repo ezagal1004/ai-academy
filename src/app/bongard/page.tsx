@@ -165,7 +165,7 @@ export default function PatternMatcherGame() {
                                         <motion.button
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.95 }}
-                                            onClick={() => window.location.href = '/'}
+                                            onClick={() => window.location.href = '/bongard'}
                                             className="flex-1 azosans-black text-lg sm:text-xl px-6 py-3 bg-[#ef3e40] text-white shadow-xl transition-all hover:bg-[#d63234] touch-manipulation"
                                             style={{ borderRadius: '6px' }}
                                         >
