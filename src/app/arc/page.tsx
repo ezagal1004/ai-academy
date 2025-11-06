@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import PuzzleGrid from '@/components/arc/PuzzleGrid';
 import DialogScreen from '@/components/arc/DialogScreen';
@@ -49,6 +49,16 @@ export default function CodeBreakerGame() {
     const currentLevel = LEVELS[currentLevelIndex];
     const currentTutorial = TUTORIAL_SCRIPTS[currentTutorialIndex];
 
+
+
+    // Add scroll effect when phase or level changes
+    useEffect(() => {
+        // Instant scroll - no smooth behavior that can be interrupted
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+    }, [gamePhase, currentLevelIndex]);
+
     // Start the game - show first tutorial
     const handleStartGame = () => {
         setGamePhase('dialog');
@@ -62,29 +72,23 @@ export default function CodeBreakerGame() {
 
     // Handle successful puzzle completion
     const handleSuccess = () => {
-        // Award stars based on attempts (1-3 stars)
         const earnedStars = attempts === 0 ? 3 : attempts === 1 ? 2 : 1;
         setStars(stars + earnedStars);
 
-        // Move to next level after delay
-        setTimeout(() => {
-            if (currentLevelIndex < LEVELS.length - 1) {
-                setCurrentLevelIndex(currentLevelIndex + 1);
-                setAttempts(0);
+        // Immediate state change - AnimatePresence handles the transition
+        if (currentLevelIndex < LEVELS.length - 1) {
+            setCurrentLevelIndex(currentLevelIndex + 1);
+            setAttempts(0);
 
-                // Check if we need to show a dialog screen (after every 2 puzzles)
-                // Puzzle IDs: 1,2 (mirror) -> 3,4 (rotation) -> 5,6 (transformation)
-                // Show dialog before puzzle 3 (index 2) and puzzle 5 (index 4)
-                if (currentLevelIndex + 1 === 2 || currentLevelIndex + 1 === 4) {
-                    setCurrentTutorialIndex(currentTutorialIndex + 1);
-                    setGamePhase('dialog');
-                }
-            } else {
-                // Game completed!
-                setGamePhase('victory');
+            if (currentLevelIndex + 1 === 2 || currentLevelIndex + 1 === 4) {
+                setCurrentTutorialIndex(currentTutorialIndex + 1);
+                setGamePhase('dialog');
             }
-        }, 1500);
+        } else {
+            setGamePhase('victory');
+        }
     };
+
 
     // Handle failed attempt
     const handleFailure = () => {
@@ -263,7 +267,7 @@ export default function CodeBreakerGame() {
                                     <div className="flex flex-col gap-4 sm:gap-5">
                                         {currentTutorial.examples.map((example, index) => {
                                             const cellSizeClass = getHintCellSize(example.input.length);
-                                            
+
                                             return (
                                                 <div
                                                     key={index}

@@ -12,9 +12,6 @@ interface DialogScreenProps {
 
 export default function DialogScreen({ tutorial, onNext }: DialogScreenProps) {
   // Scroll to top when dialog screen appears
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-4 sm:p-6 md:p-8">

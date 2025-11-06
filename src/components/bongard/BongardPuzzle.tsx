@@ -33,9 +33,7 @@ export default function BongardPuzzle({ level, onSuccess, onFailure }: BongardPu
     setIsShaking(false);
     setIsSuccess(false);
     setShuffledAnswers(shuffleArray(level.answerChoices));
-    
-    // Scroll to top when level changes
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+
   }, [level.id]);
 
   // Handle answer selection
@@ -50,11 +48,9 @@ export default function BongardPuzzle({ level, onSuccess, onFailure }: BongardPu
     const isCorrect = selectedAnswer === level.correctRule;
 
     if (isCorrect) {
-      // Show success animation then call parent
       setIsSuccess(true);
-      setTimeout(() => {
-        onSuccess();
-      }, 800);
+      // Trigger immediately - Framer Motion handles the exit animation
+      onSuccess();
     } else {
       setIsShaking(true);
       setTimeout(() => {
@@ -74,17 +70,16 @@ export default function BongardPuzzle({ level, onSuccess, onFailure }: BongardPu
           isShaking
             ? { x: [-15, 15, -15, 15, 0], transition: { duration: 0.4 } }
             : isSuccess
-              ? { 
-                  scale: [1, 1.05, 1.05], 
-                  transition: { duration: 0.8 } 
-                }
+              ? {
+                scale: [1, 1.05, 1.05],
+                transition: { duration: 0.8 }
+              }
               : { opacity: 1, scale: 1 }
         }
         exit={{ opacity: 0, scale: 0.9 }}
         transition={{ delay: 0.2 }}
-        className={`flex flex-col lg:flex-row items-center justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-12 w-full transition-all duration-300 ${
-          isSuccess ? 'drop-shadow-[0_0_30px_rgba(13,184,143,0.6)]' : ''
-        }`}
+        className={`flex flex-col lg:flex-row items-center justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-12 w-full transition-all duration-300 ${isSuccess ? 'drop-shadow-[0_0_30px_rgba(13,184,143,0.6)]' : ''
+          }`}
       >
         {/* Left Grid - YES */}
         <ImageGrid
@@ -138,10 +133,9 @@ export default function BongardPuzzle({ level, onSuccess, onFailure }: BongardPu
                 transition-all 
                 text-left
                 flex items-center gap-3
-                ${
-                  selectedAnswer === choice
-                    ? 'bg-[#187abf] text-white border-2 border-white shadow-xl scale-105'
-                    : 'bg-slate-700 text-white border-2 border-slate-600 hover:bg-slate-600'
+                ${selectedAnswer === choice
+                  ? 'bg-[#187abf] text-white border-2 border-white shadow-xl scale-105'
+                  : 'bg-slate-700 text-white border-2 border-slate-600 hover:bg-slate-600'
                 }
               `}
             >
@@ -150,10 +144,9 @@ export default function BongardPuzzle({ level, onSuccess, onFailure }: BongardPu
                 className={`
                   flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 
                   flex items-center justify-center
-                  ${
-                    selectedAnswer === choice
-                      ? 'border-white bg-white'
-                      : 'border-slate-400'
+                  ${selectedAnswer === choice
+                    ? 'border-white bg-white'
+                    : 'border-slate-400'
                   }
                 `}
               >
@@ -188,10 +181,9 @@ export default function BongardPuzzle({ level, onSuccess, onFailure }: BongardPu
             shadow-2xl 
             transition-all
             touch-manipulation
-            ${
-              selectedAnswer
-                ? 'bg-[#0db88f] text-white hover:bg-[#07a881] cursor-pointer'
-                : 'bg-slate-600 text-slate-400 cursor-not-allowed opacity-50'
+            ${selectedAnswer
+              ? 'bg-[#0db88f] text-white hover:bg-[#07a881] cursor-pointer'
+              : 'bg-slate-600 text-slate-400 cursor-not-allowed opacity-50'
             }
           `}
         >

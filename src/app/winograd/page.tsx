@@ -2,16 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import BongardPuzzle from '@/components/bongard/BongardPuzzle';
-import DialogScreen from '@/components/bongard/DialogScreen';
-import { LEVELS } from '@/components/bongard/LevelData';
-import { TUTORIAL_SCRIPTS } from '@/components/bongard/CharacterScript';
+import SentencePuzzle from '@/components/winograd/SentencePuzzle';
+import DialogScreen from '@/components/winograd/DialogScreen';
+import { LEVELS } from '@/components/winograd/LevelData';
+import { TUTORIAL_SCRIPTS } from '@/components/winograd/CharacterScript';
 import { Home, X, Info } from 'lucide-react';
 
 // Game phases
 type GamePhase = 'welcome' | 'dialog' | 'playing' | 'victory';
 
-export default function PatternMatcherGame() {
+export default function StorySolverGame() {
     const [gamePhase, setGamePhase] = useState<GamePhase>('welcome');
     const [currentLevelIndex, setCurrentLevelIndex] = useState(0);
     const [currentTutorialIndex, setCurrentTutorialIndex] = useState(0);
@@ -23,9 +23,14 @@ export default function PatternMatcherGame() {
     const currentLevel = LEVELS[currentLevelIndex];
     const currentTutorial = TUTORIAL_SCRIPTS[currentTutorialIndex];
 
-    // FORCE SMOOTH SCROLL TO TOP whenever phase or level changes
+    // Add scroll effect when phase or level changes
     useEffect(() => {
-        // Wait for DOM to settle, THEN smooth scroll
+        // Instant jump first (guarantees we're at top)
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        
+        // Then smooth scroll for visual polish (after DOM settles)
         requestAnimationFrame(() => {
             setTimeout(() => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -46,26 +51,21 @@ export default function PatternMatcherGame() {
 
     // Handle successful puzzle completion
     const handleSuccess = () => {
-        // Award stars based on attempts (1-3 stars)
         const earnedStars = attempts === 0 ? 3 : attempts === 1 ? 2 : 1;
         setStars(stars + earnedStars);
 
-        // Move to next level after delay (reduced to match puzzle animation)
-        setTimeout(() => {
-            if (currentLevelIndex < LEVELS.length - 1) {
-                setCurrentLevelIndex(currentLevelIndex + 1);
-                setAttempts(0);
+        // Immediate state change - AnimatePresence handles the transition
+        if (currentLevelIndex < LEVELS.length - 1) {
+            setCurrentLevelIndex(currentLevelIndex + 1);
+            setAttempts(0);
 
-                // Show dialog before Level 3 (index 2) and Level 5 (index 4)
-                if (currentLevelIndex + 1 === 2 || currentLevelIndex + 1 === 4) {
-                    setCurrentTutorialIndex(currentTutorialIndex + 1);
-                    setGamePhase('dialog');
-                }
-            } else {
-                // Game completed!
-                setGamePhase('victory');
+            if (currentLevelIndex + 1 === 2 || currentLevelIndex + 1 === 4) {
+                setCurrentTutorialIndex(currentTutorialIndex + 1);
+                setGamePhase('dialog');
             }
-        }, 800);
+        } else {
+            setGamePhase('victory');
+        }
     };
 
     // Handle failed attempt
@@ -289,7 +289,7 @@ export default function PatternMatcherGame() {
                             transition={{ delay: 0.2, duration: 0.6 }}
                             className="azosans-black text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white drop-shadow-2xl text-center leading-tight"
                         >
-                            PATTERN MATCHER
+                            STORY SOLVER
                         </motion.h1>
 
                         {/* Start Button */}
@@ -362,7 +362,7 @@ export default function PatternMatcherGame() {
                         </motion.div>
 
                         {/* Puzzle */}
-                        <BongardPuzzle
+                        <SentencePuzzle
                             level={currentLevel}
                             onSuccess={handleSuccess}
                             onFailure={handleFailure}
