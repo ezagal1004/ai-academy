@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AI Academy - The Human Test",
-  description: "Learn about AI and the Turing Test through an interactive game for kids aged 7-11",
+  title: "AI Academy - Human vs Machine",
+  description: "Learn about AI and Benchmarks through interactive games",
 };
 
 export default function RootLayout({
