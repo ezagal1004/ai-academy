@@ -4,15 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, Variants } from 'framer-motion';
 import { Eraser } from 'lucide-react';
 
-// Color palette
-const COLORS = {
-    0: '#E5E7EB', // Empty/White
-    1: '#ef3e40', // Red
-    2: '#4673b9', // Blue
-    3: '#eabb5c', // Yellow
-    4: '#a7c839', // Green
-    5: '#893f98', // Purple
-};
+import { ARC_COLORS as COLORS } from '@/utils/colors';
 
 const COLOR_NAMES = {
     0: 'Empty',
@@ -62,7 +54,7 @@ export default function PuzzleGrid({ level, onSuccess, onFailure }: PuzzleGridPr
     }, [level.id, level.gridSize]);
 
     // Handle cell click - paint with selected color or erase if clicking same color
-    const handleCellClick = (row: number, col: number) => {
+    const handleCellClick = (row: number, col: number): void => {
         const newGrid = outputGrid.map(r => [...r]);
 
         // If clicking on a cell with the same color as selected, erase it (set to 0)
@@ -77,14 +69,14 @@ export default function PuzzleGrid({ level, onSuccess, onFailure }: PuzzleGridPr
     };
 
     // Reset the output grid
-    const handleReset = () => {
+    const handleReset = (): void => {
         setOutputGrid(
             Array(level.gridSize).fill(null).map(() => Array(level.gridSize).fill(0))
         );
     };
 
     // Validate solution
-    const handleSubmit = () => {
+    const handleSubmit = (): void => {
         const isCorrect = JSON.stringify(outputGrid) === JSON.stringify(level.solution);
 
         if (isCorrect) {
@@ -128,7 +120,7 @@ export default function PuzzleGrid({ level, onSuccess, onFailure }: PuzzleGridPr
 
     // Calculate responsive cell size based on grid size
     // For 3x3: larger cells, for 4x4: smaller cells
-    const getCellSizeClasses = () => {
+    const getCellSizeClasses = (): string => {
         if (level.gridSize === 3) {
             return 'w-[min(12vw,60px)] h-[min(12vw,60px)] sm:w-[min(10vw,70px)] sm:h-[min(10vw,70px)] md:w-[min(8vw,80px)] md:h-[min(8vw,80px)]';
         } else {
@@ -278,7 +270,7 @@ export default function PuzzleGrid({ level, onSuccess, onFailure }: PuzzleGridPr
                                         : 'border-2 border-white/60'
                                         }`}
                                     style={{ backgroundColor: color }}
-                                    title={COLOR_NAMES[index as unknown as keyof typeof COLOR_NAMES]}
+                                    title={COLOR_NAMES[Number(index) as keyof typeof COLOR_NAMES]}
                                 />
                             ))}
                     </div>

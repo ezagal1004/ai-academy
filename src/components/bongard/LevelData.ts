@@ -1,5 +1,8 @@
 // Level data structure for Bongard problems (Pattern Matcher)
 
+import { BaseLevelWithDifficulty } from '@/types/level';
+import { SHAPE_COLORS as COLORS } from '@/utils/colors';
+
 export interface Shape {
   type: 'circle' | 'square' | 'triangle';
   color: string; // Hex color
@@ -8,26 +11,12 @@ export interface Shape {
   rotation?: number; // 0-360 degrees (mainly for triangles)
 }
 
-export interface BongardLevel {
-  id: number;
-  name: string;
-  difficulty: 'easy' | 'medium' | 'hard';
+export interface BongardLevel extends BaseLevelWithDifficulty {
   leftImages: Shape[][]; // 6 arrays of shapes (what satisfies the rule)
   rightImages: Shape[][]; // 6 arrays of shapes (what doesn't satisfy the rule)
   correctRule: string; // The correct answer
   answerChoices: string[]; // 3-4 multiple choice options
-  hint: string;
 }
-
-// Color palette - same as ARC game
-const COLORS = {
-  RED: '#ef3e40',
-  BLUE: '#4673b9',
-  YELLOW: '#eabb5c',
-  GREEN: '#a7c839',
-  PURPLE: '#893f98',
-  GRAY: '#94a3b8',
-};
 
 export const LEVELS: BongardLevel[] = [
   // LEVEL 1: Shape Type (Easy) - Circles vs Squares

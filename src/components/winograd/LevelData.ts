@@ -1,14 +1,12 @@
 // Level data structure for Winograd Schema puzzles (Story Solver)
 
-export interface WinogradLevel {
-  id: number;
-  name: string;
-  difficulty: 'easy' | 'medium' | 'hard';
+import { BaseLevelWithDifficulty } from '@/types/level';
+
+export interface WinogradLevel extends BaseLevelWithDifficulty {
   sentence: string;              // The sentence with ambiguous pronoun
   pronoun: string;               // The pronoun to identify (e.g., "it", "they")
   correctAnswer: string;         // What the pronoun refers to
   answerChoices: string[];       // Multiple choice options (2-3 choices)
-  hint: string;                  // Hint for the player
 }
 
 export const LEVELS: WinogradLevel[] = [

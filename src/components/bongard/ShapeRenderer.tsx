@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { Shape } from './LevelData';
 
 interface ShapeRendererProps {
@@ -9,7 +10,7 @@ interface ShapeRendererProps {
 
 export default function ShapeRenderer({ shapes, boxSize = 100 }: ShapeRendererProps) {
   // Helper function to convert percentage position to actual coordinates
-  const getCoordinates = (position: { x: number; y: number }) => {
+  const getCoordinates = (position: { x: number; y: number }): { x: number; y: number } => {
     return {
       x: (position.x / 100) * boxSize,
       y: (position.y / 100) * boxSize,
@@ -17,7 +18,7 @@ export default function ShapeRenderer({ shapes, boxSize = 100 }: ShapeRendererPr
   };
 
   // Render a circle
-  const renderCircle = (shape: Shape, index: number) => {
+  const renderCircle = (shape: Shape, index: number): React.ReactElement => {
     const coords = getCoordinates(shape.position);
     const radius = (shape.size / 100) * boxSize / 2;
 
@@ -35,7 +36,7 @@ export default function ShapeRenderer({ shapes, boxSize = 100 }: ShapeRendererPr
   };
 
   // Render a square
-  const renderSquare = (shape: Shape, index: number) => {
+  const renderSquare = (shape: Shape, index: number): React.ReactElement => {
     const coords = getCoordinates(shape.position);
     const size = (shape.size / 100) * boxSize;
     const x = coords.x - size / 2;
@@ -57,7 +58,7 @@ export default function ShapeRenderer({ shapes, boxSize = 100 }: ShapeRendererPr
   };
 
   // Render a triangle
-  const renderTriangle = (shape: Shape, index: number) => {
+  const renderTriangle = (shape: Shape, index: number): React.ReactElement => {
     const coords = getCoordinates(shape.position);
     const size = (shape.size / 100) * boxSize;
     const rotation = shape.rotation || 0;
@@ -92,7 +93,7 @@ export default function ShapeRenderer({ shapes, boxSize = 100 }: ShapeRendererPr
   };
 
   // Render the appropriate shape based on type
-  const renderShape = (shape: Shape, index: number) => {
+  const renderShape = (shape: Shape, index: number): React.ReactElement | null => {
     switch (shape.type) {
       case 'circle':
         return renderCircle(shape, index);

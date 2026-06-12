@@ -1,7 +1,8 @@
 // Character dialog for tutorial screens (Story Solver)
 
-export interface TutorialDialog {
-  patternName: string;
+import { BaseTutorial } from '@/types/tutorial';
+
+export interface TutorialDialog extends BaseTutorial {
   explanation: string;
   exampleSentence: string;       // Example sentence with pronoun
   examplePronoun: string;        // The pronoun to highlight

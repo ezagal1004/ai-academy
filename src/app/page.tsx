@@ -76,8 +76,7 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 + index * 0.1, duration: 0.6 }}
-              // whileHover={{ scale: 1.03, y: -3 }}
-              className="bg-slate-800 p-6 sm:p-8 rounded-2xl border-4 border-slate-700 shadow-2xl transition-all group hover:border-slate-600 flex flex-col h-full"
+className="bg-slate-800 p-6 sm:p-8 rounded-2xl border-4 border-slate-700 shadow-2xl transition-all group hover:border-slate-600 flex flex-col h-full"
             >
               {/* Image */}
               <div className="w-full aspect-square mb-4 rounded-xl overflow-hidden bg-slate-900">

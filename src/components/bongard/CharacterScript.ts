@@ -1,22 +1,14 @@
 // Character dialog for tutorial screens (Pattern Matcher)
 
 import { Shape } from './LevelData';
+import { BaseTutorial } from '@/types/tutorial';
+import { SHAPE_COLORS as COLORS } from '@/utils/colors';
 
-export interface TutorialDialog {
-  patternName: string;
+export interface TutorialDialog extends BaseTutorial {
   explanation: string;
   exampleLeft: Shape[][]; // 2 example boxes for LEFT (YES)
   exampleRight: Shape[][]; // 2 example boxes for RIGHT (NO)
 }
-
-// Color palette - same as level data
-const COLORS = {
-  RED: '#ef3e40',
-  BLUE: '#4673b9',
-  YELLOW: '#eabb5c',
-  GREEN: '#a7c839',
-  PURPLE: '#893f98',
-};
 
 export const TUTORIAL_SCRIPTS: TutorialDialog[] = [
   // Tutorial 1: Introduction to Bongard Problems (before Level 1)

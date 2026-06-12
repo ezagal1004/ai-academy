@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import ImageGrid from './ImageGrid';
 import { BongardLevel } from './LevelData';
+import { shuffleArray } from '@/utils/shuffle';
 
 interface BongardPuzzleProps {
   level: BongardLevel;
@@ -17,16 +18,6 @@ export default function BongardPuzzle({ level, onSuccess, onFailure }: BongardPu
   const [isSuccess, setIsSuccess] = useState(false);
   const [shuffledAnswers, setShuffledAnswers] = useState<string[]>([]);
 
-  // Shuffle array helper function
-  const shuffleArray = (array: string[]) => {
-    const newArray = [...array];
-    for (let i = newArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-    }
-    return newArray;
-  };
-
   // Reset selection and shuffle answers when level changes
   useEffect(() => {
     setSelectedAnswer(null);
@@ -37,12 +28,12 @@ export default function BongardPuzzle({ level, onSuccess, onFailure }: BongardPu
   }, [level.id]);
 
   // Handle answer selection
-  const handleAnswerSelect = (answer: string) => {
+  const handleAnswerSelect = (answer: string): void => {
     setSelectedAnswer(answer);
   };
 
   // Validate answer
-  const handleSubmit = () => {
+  const handleSubmit = (): void => {
     if (!selectedAnswer) return;
 
     const isCorrect = selectedAnswer === level.correctRule;

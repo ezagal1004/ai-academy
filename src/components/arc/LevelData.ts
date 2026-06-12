@@ -1,13 +1,12 @@
 // Level data structure for 6 puzzles (2 per pattern type)
 
-export interface Level {
-  id: number;
-  name: string;
+import { BaseLevel } from '@/types/level';
+
+export interface Level extends BaseLevel {
   patternType: 'mirror' | 'rotation' | 'transformation';
   gridSize: number;
   inputPattern: number[][];
   solution: number[][];
-  hint: string;
 }
 
 export const LEVELS: Level[] = [
